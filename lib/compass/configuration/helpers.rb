@@ -75,11 +75,11 @@ module Compass
           else
             Sass::Plugin.on_updating_stylesheet(&on_saved)
           end
-          
+
           Sass::Plugin.on_compilation_error do |e, filename, css|
             Compass.configuration.run_stylesheet_error(filename, e.message)
           end
-          
+
           @callbacks_loaded = true
         end
       end
@@ -104,7 +104,7 @@ module Compass
           end
           add_configuration(data)
         else
-          add_configuration(options[:project_type] || configuration.project_type_without_default || (yield if block_given?) || :stand_alone)  
+          add_configuration(options[:project_type] || configuration.project_type_without_default || (yield if block_given?) || :stand_alone)
         end
       end
 
@@ -136,6 +136,9 @@ module Compass
 
       # TODO: Deprecate the src/config.rb location.
       KNOWN_CONFIG_LOCATIONS = ['config/compass.rb', ".compass/config.rb", "config/compass.config", "config.rb", "src/config.rb"]
+      if ENV['COMPASS_CONFIG']
+        KNOWN_CONFIG_LOCATIONS.push(ENV['COMPASS_CONFIG'])
+      end
 
       # Finds the configuration file, if it exists in a known location.
       def detect_configuration_file(project_path = nil)
@@ -156,5 +159,5 @@ module Compass
   end
 
   extend Configuration::Helpers
-  
+
 end
